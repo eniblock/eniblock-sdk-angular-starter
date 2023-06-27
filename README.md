@@ -73,15 +73,15 @@ Here are the requirements to use the Eniblock SDK:
   ```
 - update your angular.json file :
   - change the builders:
-    - in /projects/<name-of-your-project>/architect/build/builder (default `@angular-devkit/build-angular:browser`)
+    - in /projects/`<name-of-your-project>`/architect/build/builder (default `@angular-devkit/build-angular:browser`)
       ```
       "builder": "@angular-builders/custom-webpack:browser",
       ```
-    - in /projects/<name-of-your-project>/architect/serve/builder (default `@angular-devkit/build-angular:dev-server`)
+    - in /projects/`<name-of-your-project>`/architect/serve/builder (default `@angular-devkit/build-angular:dev-server`)
       ```
       "builder": "@angular-builders/custom-webpack:dev-server",
       ```
-    - in /projects/<name-of-your-project>/architect/test/builder (default `@angular-devkit/build-angular:karma`)
+    - in /projects/`<name-of-your-project>`/architect/test/builder (default `@angular-devkit/build-angular:karma`)
       ```
       "builder": "@angular-builders/custom-webpack:karma",
       ```
@@ -91,9 +91,9 @@ Here are the requirements to use the Eniblock SDK:
       "src/polyfills.ts"
     ]
     ```
-    - /projects/<name-of-your-project>/architect/build/options/polyfills
-    - /projects/<name-of-your-project>/test/options/polyfills
-  - add the path of your customized Webpack configuration file in /projects/<name-of-your-project>/architect/build/options/customWebpackConfig:
+    - /projects/`<name-of-your-project>`/architect/build/options/polyfills
+    - /projects/`<name-of-your-project>`/test/options/polyfills
+  - add the path of your customized Webpack configuration file in /projects/`<name-of-your-project>`/architect/build/options/customWebpackConfig:
     ```
     "customWebpackConfig": {
       "path": "./custom-webpack.config.ts"
