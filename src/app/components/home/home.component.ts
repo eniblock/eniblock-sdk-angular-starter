@@ -14,8 +14,8 @@ export class HomeComponent implements OnInit {
 
   sdk: Eniblock = new Eniblock({
     authConfig: {
-      clientId: AuthService.AUTH_CLIENT_ID,
-      redirectUrl: AuthService.AUTH_REDIRECT_URI,
+      clientId: process.env['AUTH_CLIENT_ID']!,
+      redirectUrl: process.env['AUTH_REDIRECT_URI']!,
     },
     tssConfig: {
       kmsUrl: "https://sdk.eniblock.com",

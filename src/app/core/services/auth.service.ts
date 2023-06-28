@@ -9,17 +9,13 @@ export class AuthService {
 
   public oauthClient: OAuth2AuthCodePkceClient;
 
-  public static readonly AUTH_SDK_URL = 'https://auth.sdk.eniblock.com';
-  public static readonly AUTH_CLIENT_ID = 'a41b90ce-a548-49a3-a403-7ead41a31140';
-  public static readonly AUTH_REDIRECT_URI = 'https://localtest.me:8888/check'
-
   constructor(@Inject(DOCUMENT) private readonly document: Document) {
     this.oauthClient = new OAuth2AuthCodePkceClient({
       scopes: ['openid', 'email', 'profile', 'eniblock', 'offline_access'],
-      authorizationUrl: `${AuthService.AUTH_SDK_URL}/oauth2/auth`,
-      tokenUrl: `${AuthService.AUTH_SDK_URL}/oauth2/token`,
-      clientId: AuthService.AUTH_CLIENT_ID,
-      redirectUrl: AuthService.AUTH_REDIRECT_URI,
+      authorizationUrl: `${process.env['AUTH_SDK_URL']}/oauth2/auth`,
+      tokenUrl: `${process.env['AUTH_SDK_URL']}/oauth2/token`,
+      clientId: process.env['AUTH_CLIENT_ID']!,
+      redirectUrl: process.env['AUTH_REDIRECT_URI']!,
       storeRefreshToken: true, // Be careful with this option
       extraAuthorizationParams: {audience: 'https://sdk.eniblock.com'},
       /* onAccessTokenExpiry() {
