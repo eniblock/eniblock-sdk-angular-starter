@@ -14,7 +14,7 @@ Next, install the necessary dependencies from the root directory of your project
 npm install
 ```
 
-After this, configure the Eniblock class with your `appId`. This ID can be obtained from the [Eniblock SDK Admin Portal](https://sdk.eniblock.com/admin).
+After this, configure the Eniblock class with your `appId`. You can locate this in the `src/app/components/home/home.component.ts` file. This ID can be obtained from the [Eniblock SDK Admin Portal](https://sdk.eniblock.com/admin).
 
 ## Development Server
 
