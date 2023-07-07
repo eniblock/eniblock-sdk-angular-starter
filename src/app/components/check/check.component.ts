@@ -15,13 +15,11 @@ export class CheckComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.spinner.show('primary');
-    await this.authService.receiveCode();
-    this.authService.getTokens().then(tokens => {
-      console.log(`Get tokens:`);
-      console.log(tokens);
+    this.authService.receiveCode().then(() => {
       console.log('Refresh home page');
       this.router.navigateByUrl('/');
     }).catch(reason => console.error(reason));
+
     return Promise.resolve();
   }
 }
