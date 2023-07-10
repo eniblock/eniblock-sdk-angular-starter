@@ -1,7 +1,7 @@
 import {Component, OnInit, signal} from '@angular/core';
-import {Eniblock, UnsafeStorage} from "@eniblock/sdk";
 import {AuthService} from "../../core/services/auth.service";
 import {Title} from "@angular/platform-browser";
+import {Eniblock, UnsafeStorage} from "@eniblock/sdk";
 
 @Component({
   selector: 'app-home',
@@ -12,49 +12,37 @@ export class HomeComponent implements OnInit {
 
   title = 'demo-sdk-angular';
 
-  sdk: Eniblock = new Eniblock({
-    authConfig: {
-      clientId: process.env['AUTH_CLIENT_ID']!,
-      redirectUrl: process.env['AUTH_REDIRECT_URI']!,
-    },
-    tssConfig: {
-      kmsUrl: "https://sdk.eniblock.com",
-      wasmPath: "wasm/eniblock.wasm",
-      kmsVerify: true,
-    },
-    storageItems: [{alias: "LocalStorage", storage: new UnsafeStorage()}],
-  });
-
   publicKey = signal('');
   address = signal('');
-
-  isLoggedIn = false;
+  isLoggedIn = signal(false);
 
   constructor(private readonly authService: AuthService, private readonly titleService: Title) {
   }
 
-  login(): Promise<void> {
+  login(): void {
     return this.authService.login();
   }
 
-  ngOnInit() {
-    this.titleService.setTitle('Eniblock SDK Demo Angular 16');
-    this.isLoggedIn = this.authService.isLoggedIn();
-    if (this.isLoggedIn) {
-      console.log(`You're logged in!`)
-      Promise.resolve(this.sdk.wallet.instantiate()).then(wallet => {
-        console.log('Your Wallet:');
-        console.log(wallet);
-        Promise.resolve(wallet.account.instantiate('My first account')).then(account => {
-          Promise.resolve(account.getPublicKey()).then(publicKey => {
-            this.publicKey.set(publicKey);
-          }).catch(reason => console.error(reason));
-          Promise.resolve(account.getAddress()).then(address => {
-            this.address.set(address);
-          }).catch(reason => console.error(reason));
-        }).catch(reason => console.error(reason));
-      }).catch(reason => console.error(reason));
+  async logout(): Promise<void> {
+    this.isLoggedIn.set(false);
+    return await this.authService.logout(localStorage.getItem('starter_sdk_angular_access_token') ?? '');
+  }
 
+  async ngOnInit() {
+    this.titleService.setTitle('Eniblock SDK Demo Angular 16');
+    this.isLoggedIn.set(this.authService.isLoggedIn());
+    if (this.isLoggedIn()) {
+      console.log(`You're logged in!`)
+      const sdk = new Eniblock({
+        appId: "eniblock-demo",
+        accessTokenProvider: () => Promise.resolve(localStorage.getItem('starter_sdk_angular_access_token') ?? ''),
+        storageItems: [{alias: "UnsafeStorage", storage: new UnsafeStorage()}],
+      });
+      const wallet = await sdk.wallet.instantiate();
+      console.log('Your Wallet:', wallet);
+      const account = await wallet.account.instantiate('My first account');
+      this.publicKey.set(await account.getPublicKey());
+      this.address.set(await account.getAddress());
     }
   }
 }

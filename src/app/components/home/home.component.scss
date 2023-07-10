@@ -78,6 +78,13 @@ svg.material-icons:not(:last-child) {
   fill: #888;
 }
 
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 48
+}
+
 .card-container {
   display: flex;
   flex-wrap: wrap;
@@ -106,9 +113,9 @@ svg.material-icons:not(:last-child) {
   margin-right: 0;
 }
 
-.card.card-small {
-  height: 16px;
-  width: 168px;
+.card.card-medium {
+  height: 20px;
+  width: 190px;
 }
 
 .card-container .card:not(.highlight-card) {
