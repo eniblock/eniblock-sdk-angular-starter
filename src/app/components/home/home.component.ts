@@ -29,7 +29,7 @@ export class HomeComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.titleService.setTitle('Eniblock SDK Demo Angular 16');
+    this.titleService.setTitle('Eniblock SDK Starter Angular 16');
     this.isLoggedIn.set(this.authService.isLoggedIn());
     if (this.isLoggedIn()) {
       console.log(`You're logged in!`)
