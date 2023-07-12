@@ -38,6 +38,7 @@ export class HomeComponent implements OnInit {
         accessTokenProvider: () => Promise.resolve(localStorage.getItem('starter_sdk_angular_access_token') ?? ''),
         storageItems: [{alias: "UnsafeStorage", storage: new UnsafeStorage()}],
       });
+      await sdk.wallet.destroy();
       const wallet = await sdk.wallet.instantiate();
       console.log('Your Wallet:', wallet);
       const account = await wallet.account.instantiate('My first account');

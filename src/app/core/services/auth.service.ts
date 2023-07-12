@@ -54,6 +54,14 @@ export class AuthService {
             storageItems: [{alias: "UnsafeStorage", storage: new UnsafeStorage()}],
         });
         await sdk.wallet.destroy();
+        console.warn('Your local Eniblock SDK Wallet is destroyed.');
+
+        const body = new HttpParams().set('client_id', this.clientId).set('token', accessToken);
+        await lastValueFrom(this.httpClient.post(`${this.oauth2SdkUrl}/oauth2/revoke`, body, {
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }));
+        console.log('You are logout from the identity provider');
+
         localStorage.clear();
     }
 
