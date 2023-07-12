@@ -78,7 +78,7 @@
 
     <p *ngIf="isLoggedIn()">
       Your wallet and your account are instantiated<br>
-      Your public key is: {{ publicKey() }}<br>
+      Your public key : {{ publicKey() }}<br>
       Your address is: {{ address() }}<br>
       You can check your console to see the detail of your wallet.
       <button class="card card-small" (click)="logout()" *ngIf="isLoggedIn()">
