@@ -5,7 +5,7 @@ This project was created with [Angular CLI](https://github.com/angular/angular-c
 First, ensure that you have the Angular CLI installed.
 
 ```bash
-npm install -g @angular/cli
+sudo npm install -g @angular/cli
 ```
 
 Next, install the necessary dependencies from the root directory of your project.
@@ -14,12 +14,14 @@ Next, install the necessary dependencies from the root directory of your project
 npm install
 ```
 
-After this, configure the Eniblock class with your `appId`. You can locate this in the `src/app/components/home/home.component.ts` file. This ID can be obtained from the [Eniblock SDK Admin Console](https://sdk.eniblock.com/admin).
+Then, start the development server. 
 
-## Development Server
+```bash
+ng serve
+```
 
-To start a development server, run `ng serve`. Then navigate to `http://localhost:4200/`. The application will automatically reload if you modify any of the source files.
+Then navigate to [https://a.myho.st:8888/](https://a.myho.st:8888/).
 
 ## Integration of the SDK into an Angular Application
 
-For detailed instructions on integrating the SDK into an Angular application, refer to the [Integrate the SDK into an Angular Application](https://sdk.eniblock.com/docs/sdk_overview/sdk-get_started#-integrate-the-sdk-into-an-angular-application) page in the [Eniblock SDK documentation](https://sdk.eniblock.com/docs).
+For detailed instructions on integrating the SDK into an Angular application, refer to the [Integrate the SDK into an Angular Application](https://sdk.eniblock.com/docs/sdk_overview/sdk-get_started/get-started-angular) page in the [Eniblock SDK documentation](https://sdk.eniblock.com/docs).
