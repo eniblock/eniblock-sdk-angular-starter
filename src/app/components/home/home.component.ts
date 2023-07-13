@@ -24,9 +24,9 @@ export class HomeComponent implements OnInit {
 
     async logout(): Promise<void> {
         this.isLoggedIn.set(false);
-        if (this.sdk) {
-            this.sdk.wallet.destroy();
-        }
+        // delete the TSS Wallet share and clear local storage
+        this.sdk!.wallet.destroy();
+        console.warn('Your local Eniblock SDK Wallet is destroyed.');
         return await this.authService.logout(localStorage.getItem('starter_sdk_angular_access_token') ?? '');
     }
 
@@ -34,14 +34,14 @@ export class HomeComponent implements OnInit {
         this.titleService.setTitle('Eniblock SDK Starter Angular 16');
         this.isLoggedIn.set(this.authService.isLoggedIn());
         if (this.isLoggedIn()) {
-            const sdk = new Eniblock({
+            this.sdk = new Eniblock({
                 appId: 'eniblock-demo',
                 accessTokenProvider: () =>
                     Promise.resolve(localStorage.getItem('starter_sdk_angular_access_token') ?? ''),
                 storageItems: [{ alias: 'UnsafeStorage', storage: new UnsafeStorage() }],
             });
 
-            const wallet = await sdk.wallet.instantiate();
+            const wallet = await this.sdk.wallet.instantiate();
             const account = await wallet.account.instantiate('My first account');
             this.publicKey.set(await account.getPublicKey());
             this.address.set(await account.getAddress());

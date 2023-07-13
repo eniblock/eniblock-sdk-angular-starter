@@ -41,15 +41,6 @@ export class AuthService {
 
     // Method to handle logout
     async logout(accessToken: string) {
-        // Get an instance of Eniblock SDK, delete the TSS Wallet share and clear local storage
-        const sdk = new Eniblock({
-            appId: 'eniblock-demo',
-            accessTokenProvider: () => Promise.resolve(accessToken),
-            storageItems: [{ alias: 'UnsafeStorage', storage: new UnsafeStorage() }],
-        });
-        await sdk.wallet.destroy();
-        console.warn('Your local Eniblock SDK Wallet is destroyed.');
-
         const body = new HttpParams().set('client_id', this.clientId).set('token', accessToken);
         await lastValueFrom(
             this.httpClient.post(`${this.oauth2SdkUrl}/oauth2/revoke`, body, {
