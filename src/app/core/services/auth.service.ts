@@ -1,20 +1,18 @@
-import {Eniblock, UnsafeStorage} from "@eniblock/sdk";
-import {Injectable} from "@angular/core";
-import {generateChallenge, generateVerifier} from "../../utils/pkce";
-import {HttpClient, HttpParams} from "@angular/common/http";
-import {lastValueFrom} from "rxjs";
+import { Eniblock, UnsafeStorage } from '@eniblock/sdk';
+import { Injectable } from '@angular/core';
+import { generateChallenge, generateVerifier } from '../../utils/pkce';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { lastValueFrom } from 'rxjs';
 
 /**
  * Here is an implementation of the Authorization code flow as shown here https://www.ory.sh/docs/oauth2-oidc/authorization-code-flow.
  * Many libraries exist (https://www.npmjs.com/package/oidc-client-ts, https://www.npmjs.com/package/@auth0/auth0-spa-js ...), , you can check on https://www.npmjs.com/
  */
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class AuthService {
-
-    constructor(private httpClient: HttpClient) {
-    }
+    constructor(private httpClient: HttpClient) {}
 
     // You could pass these parameters in your environment variables
     private readonly redirectUri = 'https://a.myho.st:8888/check';
@@ -32,17 +30,13 @@ export class AuthService {
         localStorage.setItem('starter_sdk_angular_pkce_state', state);
         localStorage.setItem('starter_sdk_angular_pkce_challenge', challenge);
 
-        window.location.href = `${(this.oauth2SdkUrl)}/oauth2/auth?client_id=${encodeURIComponent(this.clientId)}&redirect_uri=${
-            encodeURIComponent(this.redirectUri)
-        }&response_type=code&scope=${
-            encodeURIComponent('openid profile email eniblock offline_access')
-        }&code_challenge=${
-            encodeURIComponent(challenge)
-        }&code_challenge_method=S256&audience=${
-            encodeURIComponent('https://sdk.eniblock.com')
-        }&state=${
-            encodeURIComponent(state)
-        }`;
+        window.location.href = `${this.oauth2SdkUrl}/oauth2/auth?client_id=${encodeURIComponent(
+            this.clientId,
+        )}&redirect_uri=${encodeURIComponent(this.redirectUri)}&response_type=code&scope=${encodeURIComponent(
+            'openid profile email eniblock offline_access',
+        )}&code_challenge=${encodeURIComponent(challenge)}&code_challenge_method=S256&audience=${encodeURIComponent(
+            'https://sdk.eniblock.com',
+        )}&state=${encodeURIComponent(state)}`;
     }
 
     // Method to handle logout
@@ -51,15 +45,17 @@ export class AuthService {
         const sdk = new Eniblock({
             appId: 'eniblock-demo',
             accessTokenProvider: () => Promise.resolve(accessToken),
-            storageItems: [{alias: "UnsafeStorage", storage: new UnsafeStorage()}],
+            storageItems: [{ alias: 'UnsafeStorage', storage: new UnsafeStorage() }],
         });
         await sdk.wallet.destroy();
         console.warn('Your local Eniblock SDK Wallet is destroyed.');
 
         const body = new HttpParams().set('client_id', this.clientId).set('token', accessToken);
-        await lastValueFrom(this.httpClient.post(`${this.oauth2SdkUrl}/oauth2/revoke`, body, {
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-        }));
+        await lastValueFrom(
+            this.httpClient.post(`${this.oauth2SdkUrl}/oauth2/revoke`, body, {
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            }),
+        );
         console.log('You are logout from the identity provider');
 
         localStorage.clear();
@@ -85,15 +81,17 @@ export class AuthService {
     // Method to exchange authorization code for access token
     private async getTokens() {
         try {
-
-            const body = new HttpParams().set('client_id', this.clientId).set('redirect_uri', this.redirectUri)
-                .set('grant_type', 'authorization_code').set('code_verifier', localStorage.getItem('starter_sdk_angular_pkce_verifier')!)
+            const body = new HttpParams()
+                .set('client_id', this.clientId)
+                .set('redirect_uri', this.redirectUri)
+                .set('grant_type', 'authorization_code')
+                .set('code_verifier', localStorage.getItem('starter_sdk_angular_pkce_verifier')!)
                 .set('code', localStorage.getItem('starter_sdk_angular_pkce_code')!);
-            const tokenResponse: any = await lastValueFrom(this.httpClient.post(`${this.oauth2SdkUrl}/oauth2/token`, body, {
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-            }));
-
-            console.log('Tokens:', tokenResponse);
+            const tokenResponse: any = await lastValueFrom(
+                this.httpClient.post(`${this.oauth2SdkUrl}/oauth2/token`, body, {
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                }),
+            );
 
             const accessToken = tokenResponse.access_token;
             const idToken = tokenResponse.id_token;
@@ -114,11 +112,13 @@ export class AuthService {
 
     // Method to fetch user information using the access token
     getUserInfo(accessToken: string) {
-        this.httpClient.get(`${this.oauth2SdkUrl}/userinfo`, {
-            headers: {'Authorization': `Bearer ${accessToken}`}
-        }).subscribe(userinfo => {
-            console.log('User info: ', userinfo);
-        });
+        this.httpClient
+            .get(`${this.oauth2SdkUrl}/userinfo`, {
+                headers: { Authorization: `Bearer ${accessToken}` },
+            })
+            .subscribe((userinfo) => {
+                console.log('User info: ', userinfo);
+            });
     }
 
     isLoggedIn() {

@@ -2,13 +2,7 @@
 
 This project was created with [Angular CLI](https://github.com/angular/angular-cli) version 16.0.0.
 
-First, ensure that you have the Angular CLI installed.
-
-```bash
-sudo npm install -g @angular/cli
-```
-
-Next, install the necessary dependencies from the root directory of your project.
+Install the necessary dependencies from the root directory of your project.
 
 ```bash
 npm install
@@ -17,7 +11,7 @@ npm install
 Then, start the development server. 
 
 ```bash
-ng serve
+npm start
 ```
 
 Then navigate to [https://a.myho.st:8888/](https://a.myho.st:8888/).
