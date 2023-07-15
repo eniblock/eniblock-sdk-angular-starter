@@ -40,6 +40,9 @@ export class HomeComponent implements OnInit {
                     Promise.resolve(localStorage.getItem('starter_sdk_angular_access_token') ?? ''),
                 storageItems: [{ alias: 'UnsafeStorage', storage: new UnsafeStorage() }],
             });
+            if (!localStorage.getItem('share-ECDSA')) {
+                this.sdk!.wallet.destroy();
+            }
 
             const wallet = await this.sdk.wallet.instantiate();
             const account = await wallet.account.instantiate('My first account');
