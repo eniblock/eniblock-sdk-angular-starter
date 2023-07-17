@@ -8,7 +8,7 @@ Install the necessary dependencies from the root directory of your project.
 npm install
 ```
 
-Then, start the development server. 
+Then, start the development server.
 
 ```bash
 npm start
