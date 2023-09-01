@@ -1,4 +1,3 @@
-import { Eniblock, UnsafeStorage } from '@eniblock/sdk';
 import { Injectable } from '@angular/core';
 import { generateChallenge, generateVerifier } from '../../utils/pkce';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -16,8 +15,8 @@ export class AuthService {
 
     // You could pass these parameters in your environment variables
     private readonly redirectUri = 'https://a.myho.st:8888/check';
-    private readonly clientId = 'a41b90ce-a548-49a3-a403-7ead41a31140';
-    private readonly oauth2SdkUrl = 'https://auth.sdk.eniblock.com';
+    private readonly clientId = 'W4JkWYy4Qy1PogYmwOBt9I3HhQlzqD2m';
+    private readonly oauth2SdkUrl = 'https://eniblock-sdk-demo.eu.auth0.com';
 
     // Method to initiate login process
     login() {
