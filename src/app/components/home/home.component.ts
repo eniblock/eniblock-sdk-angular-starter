@@ -25,7 +25,7 @@ export class HomeComponent implements OnInit {
     async logout(): Promise<void> {
         this.isLoggedIn.set(false);
         // delete the TSS Wallet share and clear local storage
-        this.sdk!.wallet.destroy();
+        await this.sdk?.wallet.destroy();
         console.warn('Your local Eniblock SDK Wallet is destroyed.');
         return await this.authService.logout(localStorage.getItem('starter_sdk_angular_access_token') ?? '');
     }
@@ -41,7 +41,7 @@ export class HomeComponent implements OnInit {
                 storageItems: [{ alias: 'UnsafeStorage', storage: new UnsafeStorage() }],
             });
             if (!localStorage.getItem('share-ECDSA')) {
-                this.sdk!.wallet.destroy();
+                await this.sdk.wallet.destroy();
             }
 
             const wallet = await this.sdk.wallet.instantiate();

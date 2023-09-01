@@ -29,12 +29,12 @@ export class AuthService {
         localStorage.setItem('starter_sdk_angular_pkce_state', state);
         localStorage.setItem('starter_sdk_angular_pkce_challenge', challenge);
 
-        window.location.href = `${this.oauth2SdkUrl}/oauth2/auth?client_id=${encodeURIComponent(
+        window.location.href = `${this.oauth2SdkUrl}/authorize?client_id=${encodeURIComponent(
             this.clientId,
         )}&redirect_uri=${encodeURIComponent(this.redirectUri)}&response_type=code&scope=${encodeURIComponent(
             'openid profile email eniblock offline_access',
         )}&code_challenge=${encodeURIComponent(challenge)}&code_challenge_method=S256&audience=${encodeURIComponent(
-            'https://sdk.eniblock.com',
+            'https://eniblock-sdk-demo.eu.auth0.com/api/v2/',
         )}&state=${encodeURIComponent(state)}`;
     }
 
@@ -42,7 +42,7 @@ export class AuthService {
     async logout(accessToken: string) {
         const body = new HttpParams().set('client_id', this.clientId).set('token', accessToken);
         await lastValueFrom(
-            this.httpClient.post(`${this.oauth2SdkUrl}/oauth2/revoke`, body, {
+            this.httpClient.post(`${this.oauth2SdkUrl}/oauth/revoke`, body, {
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             }),
         );
@@ -78,7 +78,7 @@ export class AuthService {
                 .set('code_verifier', localStorage.getItem('starter_sdk_angular_pkce_verifier')!)
                 .set('code', localStorage.getItem('starter_sdk_angular_pkce_code')!);
             const tokenResponse: any = await lastValueFrom(
-                this.httpClient.post(`${this.oauth2SdkUrl}/oauth2/token`, body, {
+                this.httpClient.post(`${this.oauth2SdkUrl}/oauth/token`, body, {
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 }),
             );
