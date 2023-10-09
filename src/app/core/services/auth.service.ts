@@ -15,7 +15,7 @@ export class AuthService {
 
     // You could pass these parameters in your environment variables
     private readonly redirectUri = 'https://a.myho.st:8888/check';
-    private readonly clientId = 'W4JkWYy4Qy1PogYmwOBt9I3HhQlzqD2m';
+    private readonly clientId = 'W4JkWYy4Qy1PogYmwOBt9I3HhQlzqD2m'; // gitleaks:allow
     private readonly oauth2SdkUrl = 'https://auth.demo.eniblock.com';
 
     // Method to initiate login process
