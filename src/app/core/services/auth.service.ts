@@ -14,9 +14,9 @@ export class AuthService {
     constructor(private httpClient: HttpClient) {}
 
     // You could pass these parameters in your environment variables
-    private readonly redirectUri = 'https://a.myho.st:8888/check';
-    private readonly clientId = 'W4JkWYy4Qy1PogYmwOBt9I3HhQlzqD2m'; // gitleaks:allow
-    private readonly oauth2SdkUrl = 'https://auth.demo.eniblock.com';
+    private readonly OAUTH2_ALLOWED_CALLBACK_URL = 'https://a.myho.st:8888/check';
+    private readonly OAUTH2_CLIENTID = 'W4JkWYy4Qy1PogYmwOBt9I3HhQlzqD2m'; // gitleaks:allow
+    private readonly OAUTH2_DOMAIN = 'https://eniblock-sdk-demo.eu.auth0.com';
 
     // Method to initiate login process
     login() {
@@ -29,20 +29,29 @@ export class AuthService {
         localStorage.setItem('starter_sdk_angular_pkce_state', state);
         localStorage.setItem('starter_sdk_angular_pkce_challenge', challenge);
 
-        window.location.href = `${this.oauth2SdkUrl}/authorize?client_id=${encodeURIComponent(
-            this.clientId,
-        )}&redirect_uri=${encodeURIComponent(this.redirectUri)}&response_type=code&scope=${encodeURIComponent(
-            'openid profile email eniblock offline_access',
-        )}&code_challenge=${encodeURIComponent(challenge)}&code_challenge_method=S256&audience=${encodeURIComponent(
-            'https://eniblock-sdk-demo.eu.auth0.com/api/v2/',
-        )}&state=${encodeURIComponent(state)}`;
+        const queryParameters = {
+            client_id: this.OAUTH2_CLIENTID,
+            redirect_uri: this.OAUTH2_ALLOWED_CALLBACK_URL,
+            response_type: 'code',
+            scope: 'openid profile email eniblock offline_access',
+            code_challenge: challenge,
+            code_challenge_method: 'S256',
+            audience: `${this.OAUTH2_DOMAIN}/api/v2/`,
+            state: state,
+        };
+
+        const encodedParameters = Object.entries(queryParameters)
+            .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+            .join('&');
+
+        window.location.href = `${this.OAUTH2_DOMAIN}/authorize?${encodedParameters}`;
     }
 
     // Method to handle logout
     async logout(accessToken: string) {
-        const body = new HttpParams().set('client_id', this.clientId).set('token', accessToken);
+        const body = new HttpParams().set('client_id', this.OAUTH2_CLIENTID).set('token', accessToken);
         await lastValueFrom(
-            this.httpClient.post(`${this.oauth2SdkUrl}/oauth/revoke`, body, {
+            this.httpClient.post(`${this.OAUTH2_DOMAIN}/oauth/revoke`, body, {
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             }),
         );
@@ -72,13 +81,13 @@ export class AuthService {
     private async getTokens() {
         try {
             const body = new HttpParams()
-                .set('client_id', this.clientId)
-                .set('redirect_uri', this.redirectUri)
+                .set('client_id', this.OAUTH2_CLIENTID)
+                .set('redirect_uri', this.OAUTH2_ALLOWED_CALLBACK_URL)
                 .set('grant_type', 'authorization_code')
                 .set('code_verifier', localStorage.getItem('starter_sdk_angular_pkce_verifier')!)
                 .set('code', localStorage.getItem('starter_sdk_angular_pkce_code')!);
             const tokenResponse: any = await lastValueFrom(
-                this.httpClient.post(`${this.oauth2SdkUrl}/oauth/token`, body, {
+                this.httpClient.post(`${this.OAUTH2_DOMAIN}/oauth/token`, body, {
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 }),
             );
@@ -103,7 +112,7 @@ export class AuthService {
     // Method to fetch user information using the access token
     getUserInfo(accessToken: string) {
         this.httpClient
-            .get(`${this.oauth2SdkUrl}/userinfo`, {
+            .get(`${this.OAUTH2_DOMAIN}/userinfo`, {
                 headers: { Authorization: `Bearer ${accessToken}` },
             })
             .subscribe((userinfo) => {
