@@ -38,7 +38,7 @@ export class HomeComponent implements OnInit {
                 appId: 'eniblock-demo',
                 accessTokenProvider: () =>
                     Promise.resolve(localStorage.getItem('starter_sdk_angular_access_token') ?? ''),
-                storageItems: [{ alias: 'UnsafeStorage', storage: new UnsafeStorage() }],
+                storage: new UnsafeStorage(),
             });
             if (!localStorage.getItem(`share-${this.sdk.appId}-ECDSA`)) {
                 await this.sdk.wallet.destroy();
