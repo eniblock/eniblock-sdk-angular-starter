@@ -44,9 +44,8 @@ export class HomeComponent implements OnInit {
                 await this.sdk.wallet.destroy();
             }
 
-            const wallet = await this.sdk.wallet.instantiate();
-            const account = await wallet.account.instantiate('My first account');
-            this.publicKey.set(await account.getPublicKey());
+            const account = await this.sdk.account.instantiate('My first account');
+            this.publicKey.set(account.getPublicKey());
             this.address.set(await account.getAddress());
         }
     }
